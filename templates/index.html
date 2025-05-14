@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h2 class="mb-0">Bienvenue sur Checklist Pro</h2>
+            </div>
+            <div class="card-body">
+                <p class="lead">Créez et gérez vos checklists personnalisées facilement.</p>
+                <a href="{{ url_for('create_template') }}" class="btn btn-dark">
+                    <i class="fas fa-plus-circle"></i> Créer un nouveau modèle
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h3 class="mb-0">Modèles disponibles</h3>
+            </div>
+            <div class="card-body">
+                {% if templates %}
+                    <div class="row">
+                        {% for template in templates %}
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        {{ template.name }}
+                                    </div>
+                                    <div class="card-body">
+                                        <p><strong>Éléments :</strong> {{ template.elements|length }}</p>
+                                        <ul class="list-group list-group-flush">
+                                            {% for item in template.elements[:3] %}
+                                                <li class="list-group-item">{{ item }}</li>
+                                            {% endfor %}
+                                            {% if template.elements|length > 3 %}
+                                                <li class="list-group-item text-muted">... et {{ template['items']|length - 3 }} de plus</li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                    <div class="card-footer">
+                                        <a href="{{ url_for('fill_checklist', template_id=template.id) }}" class="btn btn-dark">
+                                            <i class="fas fa-clipboard-check"></i> Remplir
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Aucun modèle disponible. Créez votre premier modèle !
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

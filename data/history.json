@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "template_id": 2,
+    "template_name": "Fruits",
+    "date": "2025-05-14 15:10:28",
+    "items": [
+      {
+        "name": "Pommes",
+        "checked": true
+      },
+      {
+        "name": "Poires",
+        "checked": true
+      },
+      {
+        "name": "Prunes",
+        "checked": false
+      }
+    ],
+    "comment": "Coucou!"
+  },
+  {
+    "id": 2,
+    "template_id": 1,
+    "template_name": "Fruits",
+    "date": "2025-05-14 15:14:26",
+    "items": [
+      {
+        "name": "Pommes",
+        "checked": true
+      },
+      {
+        "name": "Poires",
+        "checked": false
+      },
+      {
+        "name": "Prunes",
+        "checked": true
+      }
+    ],
+    "comment": "Test!"
+  }
+]

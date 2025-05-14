@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block title %}Créer un modèle{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h2 class="mb-0">Créer un nouveau modèle de checklist</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom du modèle</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Éléments de la checklist</label>
+                        <div id="items-container">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="items" placeholder="Élément de checklist" required>
+                                <button type="button" class="btn btn-danger remove-item" disabled>
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-secondary btn-add-item" id="add-item">
+                            <i class="fas fa-plus"></i> Ajouter un élément
+                        </button>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary me-md-2">Annuler</a>
+                        <button type="submit" class="btn btn-dark">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const itemsContainer = document.getElementById('items-container');
+        const addItemButton = document.getElementById('add-item');
+        
+        // Ajouter un nouvel élément
+        addItemButton.addEventListener('click', function() {
+            const newItem = document.createElement('div');
+            newItem.className = 'input-group mb-2';
+            newItem.innerHTML = `
+                <input type="text" class="form-control" name="items" placeholder="Élément de checklist" required>
+                <button type="button" class="btn btn-danger remove-item">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            itemsContainer.appendChild(newItem);
+            
+            // Activer tous les boutons de suppression
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.disabled = document.querySelectorAll('.input-group').length <= 1;
+            });
+        });
+        
+        // Supprimer un élément
+        itemsContainer.addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-item') || e.target.closest('.remove-item')) {
+                const button = e.target.classList.contains('remove-item') ? e.target : e.target.closest('.remove-item');
+                const inputGroup = button.closest('.input-group');
+                
+                if (document.querySelectorAll('.input-group').length > 1) {
+                    inputGroup.remove();
+                    
+                    // Désactiver le dernier bouton de suppression s'il n'en reste qu'un
+                    document.querySelectorAll('.remove-item').forEach(button => {
+                        button.disabled = document.querySelectorAll('.input-group').length <= 1;
+                    });
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Remplir une checklist{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h2 class="mb-0">Remplir la checklist : {{ template.name }}</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-4">
+                        <h4>Éléments à vérifier :</h4>
+                        <div class="list-group">
+                            {% for item in template['items'] %}
+                                <div class="list-group-item">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="checked_items" value="{{ item }}" id="item-{{ loop.index }}">
+                                        <label class="form-check-label" for="item-{{ loop.index }}">
+                                            {{ item }}
+                                        </label>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">Commentaire (optionnel)</label>
+                        <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="Ajoutez un commentaire si nécessaire..."></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('index') }}" class="btn btn-outline-secondary me-md-2">Annuler</a>
+                        <button type="submit" class="btn btn-secondary">
+                            <i class="fas fa-save"></i> Enregistrer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
