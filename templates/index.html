@@ -41,7 +41,7 @@
                                                 <li class="list-group-item">{{ item }}</li>
                                             {% endfor %}
                                             {% if template.elements|length > 3 %}
-                                                <li class="list-group-item text-muted">... et {{ template['items']|length - 3 }} de plus</li>
+                                                <li class="list-group-item text-muted">... et {{ template.elements|length - 3 }} de plus</li>
                                             {% endif %}
                                         </ul>
                                     </div>
@@ -49,6 +49,16 @@
                                         <a href="{{ url_for('fill_checklist', template_id=template.id) }}" class="btn btn-dark">
                                             <i class="fas fa-clipboard-check"></i> Remplir
                                         </a>
+                                        <!-- Bouton Supprimer ajouté à chaque carte -->
+                                        <button type="button" class="btn btn-danger ms-2" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#deleteModal"
+                                                data-template-id="{{ template.id }}"
+                                                data-template-name="{{ template.name }}">
+                                            <i class="fas fa-trash-alt"></i> Supprimer
+                                        </button>
+                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -64,3 +74,34 @@
     </div>
 </div>
 {% endblock %}
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer le modèle <strong id="templateName"></strong> ?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form id="deleteForm" method="POST" action="">
+                    <button type="submit" class="btn btn-danger">Supprimer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('deleteModal').addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const templateId = button.getAttribute('data-template-id');
+        const templateName = button.getAttribute('data-template-name');
+        
+        document.getElementById('templateName').textContent = templateName;
+        document.getElementById('deleteForm').action = `/delete_template/${templateId}`;
+    });
+</script>

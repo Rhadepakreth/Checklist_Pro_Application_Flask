@@ -131,10 +131,36 @@ celerybeat.pid
 .env
 .venv
 env/
+# Environnement virtuel
 venv/
-ENV/
-env.bak/
-venv.bak/
+.env
+
+# Fichiers de cache Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environnements IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Fichiers de base de données
+*.sqlite
+*.db
+
+# Fichiers de logs
+*.log
+
+# Fichiers de configuration sensible
+instance/
+.webassets-cache
+
+# Fichiers de distribution / compilation
+*.egg-info/
+dist/
+build/
 
 # Spyder project settings
 .spyderproject

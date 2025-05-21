@@ -7,5 +7,13 @@
       "Poires",
       "Prunes"
     ]
+  },
+  {
+    "id": 2,
+    "name": "L\u00e9gumes",
+    "items": [
+      "Courgette",
+      "Potiron"
+    ]
   }
 ]

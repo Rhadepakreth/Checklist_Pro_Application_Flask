@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 import json
 import os
 import datetime
+import uuid
 from pathlib import Path
 
 app = Flask(__name__)
@@ -42,7 +43,7 @@ def save_history(history):
         json.dump(history, f, indent=2)
 
 # Routes
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
     templates = load_templates()
     # In the index route
@@ -116,6 +117,14 @@ def fill_checklist(template_id):
         return redirect(url_for('history'))
     
     return render_template('fill_checklist.html', template=template)
+
+@app.route('/delete_template/<int:template_id>', methods=['POST'])
+def delete_template(template_id):
+    templates = load_templates()
+    templates = [t for t in templates if t['id'] != template_id]
+    save_templates(templates)
+    flash('Modèle supprimé avec succès', 'success')
+    return redirect(url_for('index'))
 
 @app.route('/history')
 def history():
