@@ -75,8 +75,6 @@
         </div>
     </div>
 </div>
-{% endblock %} {# Fin du block content #}
-
 
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -97,6 +95,8 @@
         </div>
     </div>
 </div>
+{% endblock %} {# Fin du block content #}
+
 
 {% block scripts %}
 {{ super() if super }} {# Si base.html a un bloc scripts avec du contenu #}
@@ -106,16 +106,11 @@ document.addEventListener('DOMContentLoaded', function () {
     if (deleteModal) {
         deleteModal.addEventListener('show.bs.modal', event => {
             const button = event.relatedTarget;
+            if (!button) return;
             const templateId = button.getAttribute('data-template-id');
             const templateName = button.getAttribute('data-template-name');
-            
-            const modalTitle = deleteModal.querySelector('.modal-title');
-            const modalBody = deleteModal.querySelector('.modal-body strong');
-            const deleteForm = deleteModal.querySelector('#deleteTemplateForm');
-            
-            modalTitle.textContent = `Supprimer ${templateName}`;
-            modalBody.textContent = templateName;
-            deleteForm.action = `/delete_template/${templateId}`;
+            document.getElementById('templateNameInModal').textContent = templateName || '';
+            document.getElementById('deleteTemplateForm').action = `/delete_template/${templateId}`;
         });
     }
 });
