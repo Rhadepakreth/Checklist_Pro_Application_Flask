@@ -49,16 +49,18 @@
                                         <a href="{{ url_for('fill_checklist', template_id=template.id) }}" class="btn btn-dark">
                                             <i class="fas fa-clipboard-check"></i> Remplir
                                         </a>
-                                        <!-- Bouton Supprimer ajouté à chaque carte -->
-                                        <button type="button" class="btn btn-danger ms-2" 
+                                        <!-- Début des nouveaux boutons -->
+                                        <a href="{{ url_for('edit_template', template_id=template.id) }}" class="btn btn-outline-secondary">
+                                            <i class="fas fa-edit"></i> Modifier
+                                        </a>
+                                        <button type="button" class="btn btn-danger" 
                                                 data-bs-toggle="modal" 
                                                 data-bs-target="#deleteModal"
                                                 data-template-id="{{ template.id }}"
                                                 data-template-name="{{ template.name }}">
                                             <i class="fas fa-trash-alt"></i> Supprimer
                                         </button>
-                                        
-
+                                        <!-- Fin des nouveaux boutons -->
                                     </div>
                                 </div>
                             </div>
@@ -73,21 +75,22 @@
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock %} {# Fin du block content #}
 
-<div class="modal fade" id="deleteModal" tabindex="-1">
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title">Confirmer la suppression</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>Êtes-vous sûr de vouloir supprimer le modèle <strong id="templateName"></strong> ?</p>
+                <p>Êtes-vous sûr de vouloir supprimer le modèle <strong id="templateNameInModal"></strong> ?</p> {# ID légèrement modifié pour clarté #}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                <form id="deleteForm" method="POST" action="">
+                <form id="deleteTemplateForm" method="POST" action="" style="display: inline;"> {# ID légèrement modifié pour clarté #}
                     <button type="submit" class="btn btn-danger">Supprimer</button>
                 </form>
             </div>
@@ -95,13 +98,26 @@
     </div>
 </div>
 
+{% block scripts %}
+{{ super() if super }} {# Si base.html a un bloc scripts avec du contenu #}
 <script>
-    document.getElementById('deleteModal').addEventListener('show.bs.modal', function(event) {
-        const button = event.relatedTarget;
-        const templateId = button.getAttribute('data-template-id');
-        const templateName = button.getAttribute('data-template-name');
-        
-        document.getElementById('templateName').textContent = templateName;
-        document.getElementById('deleteForm').action = `/delete_template/${templateId}`;
-    });
+document.addEventListener('DOMContentLoaded', function () {
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const templateId = button.getAttribute('data-template-id');
+            const templateName = button.getAttribute('data-template-name');
+            
+            const modalTitle = deleteModal.querySelector('.modal-title');
+            const modalBody = deleteModal.querySelector('.modal-body strong');
+            const deleteForm = deleteModal.querySelector('#deleteTemplateForm');
+            
+            modalTitle.textContent = `Supprimer ${templateName}`;
+            modalBody.textContent = templateName;
+            deleteForm.action = `/delete_template/${templateId}`;
+        });
+    }
+});
 </script>
+{% endblock %}
